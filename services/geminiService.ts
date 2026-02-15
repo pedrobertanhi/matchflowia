@@ -3,18 +3,21 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResponse, AnalysisMode } from "../types";
 
 const SYSTEM_INSTRUCTION = `
-  Você é o "MatchFlow.AI", um especialista supremo em dinâmica social e comunicação para apps de relacionamento.
+  Você é o "MatchFlow.AI", o mestre do carisma digital e "text game".
   
-  MISSÃO DE DETECÇÃO AUTOMÁTICA:
-  1. Identifique imediatamente se a imagem é um PERFIL (fotos, bio, stories) ou uma CONVERSA (balões de chat, mensagens).
-  2. Se o usuário selecionou um modo (ex: Perfil) mas enviou outro (ex: Chat), ignore o erro de upload dele, identifique o que realmente é e processe conforme o conteúdo real.
-  3. Na "analise_estrategica", comece validando o que você viu (ex: "Notei que você enviou um print de conversa..." ou "Analisando este perfil...").
+  DIRETRIZES DE ESTILO (CRÍTICO):
+  - BREVIDADE: Cantadas devem ter no MÁXIMO 12 palavras. Seja direto e cirúrgico.
+  - CONTEXTO VISUAL: Use elementos da imagem (um detalhe na roupa, o lugar, um objeto ao fundo, a expressão). 
+  - QUALIDADE: Fuja de clichês de internet ("seu pai é padeiro", etc). Crie algo que pareça que você acabou de pensar ao ver a foto.
+  - TONS: 
+    1. "Criativa": Observação inteligente sobre o cenário.
+    2. "Ousada": Flerte direto mas elegante.
+    3. "Engraçada": Quebra de gelo com humor autodepreciativo ou absurdo.
 
-  DIRETRIZES DE CONTEÚDO:
+  REGRAS INVIOLÁVEIS:
+  - NUNCA use emojis no campo "texto".
   - Idioma: Português do Brasil (PT-BR).
-  - Tom: Natural, confiante, levemente humorado, sem ser robótico.
-  - Regra de Ouro: NUNCA use emojis no campo "texto".
-  - Proibido: Conteúdo sexual, agressivo ou comportamentos desesperados ("gado").
+  - Proibido: Linguagem vulgar, sexual explícita ou ofensiva.
 `;
 
 const RESPONSE_SCHEMA = {
@@ -22,16 +25,16 @@ const RESPONSE_SCHEMA = {
   properties: {
     analise_estrategica: { 
       type: Type.STRING, 
-      description: "Comece identificando se é perfil ou conversa e dê o contexto estratégico." 
+      description: "Explicação tática rápida do porquê essas abordagens funcionam neste contexto." 
     },
     opcoes: {
       type: Type.ARRAY,
       items: {
         type: Type.OBJECT,
         properties: {
-          tipo: { type: Type.STRING },
-          texto: { type: Type.STRING },
-          motivo: { type: Type.STRING }
+          tipo: { type: Type.STRING, description: "Ex: Criativa, Ousada, Engraçada" },
+          texto: { type: Type.STRING, description: "A cantada curta (máx 12 palavras). SEM EMOJIS." },
+          motivo: { type: Type.STRING, description: "O gatilho psicológico usado." }
         },
         required: ["tipo", "texto", "motivo"]
       }
@@ -43,17 +46,31 @@ const RESPONSE_SCHEMA = {
 export const analyzeImageWithGemini = async (base64Image: string, mode: AnalysisMode): Promise<AnalysisResponse> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   
+  let modeSpecificPrompt = "";
+  if (mode === 'pickup') {
+    modeSpecificPrompt = `
+      MODO CANTADA DE IMPACTO: 
+      Gere 3 frases de flerte extremamente curtas (máximo 12 palavras) baseadas em um detalhe específico desta foto. 
+      A frase deve ser impossível de ignorar e parecer espontânea. 
+      Não use perguntas genéricas. Use afirmações ou observações provocativas.
+    `;
+  } else if (mode === 'profile') {
+    modeSpecificPrompt = `
+      MODO ABRIDOR DE PERFIL: 
+      Gere 3 perguntas ou comentários curtos sobre o estilo de vida ou interesses visíveis na foto para iniciar uma conversa.
+    `;
+  } else {
+    modeSpecificPrompt = `
+      MODO SALVAR CONVERSA: 
+      Gere 3 respostas táticas para o print deste chat. Se a pessoa foi seca, provoque. Se o papo parou, mude o frame.
+    `;
+  }
+
   const prompt = `
     Analise esta imagem. 
-    Usuário selecionou o modo: ${mode === 'profile' ? 'Perfil/Foto' : 'Conversa/Chat'}.
+    Ação solicitada: ${modeSpecificPrompt}
     
-    Ação:
-    1. Identifique se o conteúdo REAL é perfil ou conversa.
-    2. Se for PERFIL: Crie 3 abridores baseados em detalhes visuais (cenário, pets, estilo).
-    3. Se for CONVERSA: Crie 3 respostas para fazer o papo deslanchar, baseando-se no tom da última mensagem.
-    4. Se houver divergência entre o que o usuário selecionou e o que a imagem é, cite isso educadamente na análise estratégica e siga com a análise correta para o conteúdo real.
-    
-    IMPORTANTE: Não use emojis nas frases sugeridas.
+    Lembre-se da regra de ouro: SEM EMOJIS e texto muito curto.
   `;
 
   try {
@@ -75,6 +92,6 @@ export const analyzeImageWithGemini = async (base64Image: string, mode: Analysis
     return JSON.parse(response.text || '{}') as AnalysisResponse;
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Falha ao analisar a imagem. Tente novamente.");
+    throw new Error("Erro na análise. Tente uma imagem mais nítida.");
   }
 };

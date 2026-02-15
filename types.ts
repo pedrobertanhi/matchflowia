@@ -10,7 +10,7 @@ export interface AnalysisResponse {
   opcoes: IceBreakerOption[];
 }
 
-export type AnalysisMode = 'profile' | 'chat';
+export type AnalysisMode = 'profile' | 'chat' | 'pickup';
 
 export enum LoadingState {
   IDLE = 'IDLE',

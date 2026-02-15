@@ -61,6 +61,19 @@ const App: React.FC = () => {
     }
   };
 
+  const getGradientByMode = () => {
+    if (mode === 'profile') return 'bg-gradient-to-r from-orange-500 to-pink-500 shadow-orange-500/10';
+    if (mode === 'chat') return 'bg-gradient-to-r from-pink-500 to-purple-600 shadow-purple-500/10';
+    return 'bg-gradient-to-r from-rose-500 to-red-600 shadow-red-500/10';
+  };
+
+  const getActiveTabStyle = (currentMode: AnalysisMode) => {
+    if (mode !== currentMode) return 'text-slate-500 hover:text-slate-300';
+    if (currentMode === 'profile') return 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg';
+    if (currentMode === 'chat') return 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg';
+    return 'bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-lg';
+  };
+
   if (view === 'home') {
     return <Home onStart={() => setView('app')} />;
   }
@@ -90,10 +103,10 @@ const App: React.FC = () => {
 
         {/* Tab Switcher */}
         {!result && (
-          <div className="flex p-1 bg-slate-900/50 backdrop-blur-md rounded-2xl border border-white/5 mb-8 md:mb-12 w-full max-w-sm relative">
+          <div className="flex p-1 bg-slate-900/50 backdrop-blur-md rounded-2xl border border-white/5 mb-8 md:mb-12 w-full max-w-md relative overflow-x-auto no-scrollbar">
             <button 
               onClick={() => handleModeChange('profile')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-300 ${mode === 'profile' ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${getActiveTabStyle('profile')}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -102,12 +115,21 @@ const App: React.FC = () => {
             </button>
             <button 
               onClick={() => handleModeChange('chat')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest transition-all duration-300 ${mode === 'chat' ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${getActiveTabStyle('chat')}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
               Conversa
+            </button>
+            <button 
+              onClick={() => handleModeChange('pickup')}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${getActiveTabStyle('pickup')}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              Cantadas
             </button>
           </div>
         )}
@@ -119,22 +141,18 @@ const App: React.FC = () => {
                 onClick={() => fileInputRef.current?.click()}
                 className="relative overflow-hidden group w-full aspect-square sm:aspect-video bg-slate-900/40 border-2 border-dashed border-slate-800 rounded-[2rem] p-6 md:p-8 flex flex-col items-center justify-center cursor-pointer hover:border-pink-500/40 hover:bg-slate-900/60 transition-all duration-300 shadow-xl"
               >
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-xl group-hover:scale-110 transition-transform">
-                  {mode === 'profile' ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  )}
+                <div className={`w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-xl group-hover:scale-110 transition-transform`}>
+                  {mode === 'profile' && <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
+                  {mode === 'chat' && <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>}
+                  {mode === 'pickup' && <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 md:h-8 md:w-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>}
                 </div>
                 <h2 className="text-base md:text-lg font-bold text-white mb-2 text-center">
-                  {mode === 'profile' ? 'Envie o print do perfil/story' : 'Envie o print da conversa'}
+                  {mode === 'profile' && 'Envie o print do perfil/story'}
+                  {mode === 'chat' && 'Envie o print da conversa'}
+                  {mode === 'pickup' && 'Envie a foto do perfil para a cantada'}
                 </h2>
                 <p className="text-slate-500 text-center max-w-xs text-[10px] md:text-xs italic px-4">
-                  Nossa IA detectará o tipo de print automaticamente para você.
+                  {mode === 'pickup' ? 'Nossa IA criará algo único baseado no cenário ou estilo da pessoa.' : 'Nossa IA detectará o tipo de print automaticamente para você.'}
                 </p>
                 <input 
                   type="file" 
@@ -148,7 +166,7 @@ const App: React.FC = () => {
           ) : (
             <section className="w-full flex flex-col items-center gap-6 md:gap-8 animate-in zoom-in-95 duration-500">
               <div className="relative group w-full max-w-[260px] md:max-w-sm">
-                <div className={`absolute -inset-1 rounded-[2.2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 ${mode === 'profile' ? 'bg-gradient-to-r from-orange-500 to-pink-500' : 'bg-gradient-to-r from-pink-500 to-purple-600'}`}></div>
+                <div className={`absolute -inset-1 rounded-[2.2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 ${getGradientByMode()}`}></div>
                 <div className="relative">
                   <img 
                     src={image} 
@@ -171,9 +189,9 @@ const App: React.FC = () => {
                   <Button 
                     onClick={handleAnalyze} 
                     isLoading={loadingState === LoadingState.ANALYZING}
-                    className={`w-full max-w-xs md:max-w-sm h-14 md:h-16 text-base md:text-lg rounded-2xl font-black border-none shadow-xl ${mode === 'profile' ? 'bg-gradient-to-r from-orange-500 to-pink-500 shadow-orange-500/10' : 'bg-gradient-to-r from-pink-500 to-purple-600 shadow-purple-500/10'}`}
+                    className={`w-full max-w-xs md:max-w-sm h-14 md:h-16 text-base md:text-lg rounded-2xl font-black border-none shadow-xl ${getGradientByMode()}`}
                   >
-                    {loadingState === LoadingState.ANALYZING ? 'Detectando conteúdo...' : 'Analisar Inteligente'}
+                    {loadingState === LoadingState.ANALYZING ? 'Gerando inteligência...' : mode === 'pickup' ? 'Gerar Cantadas' : 'Analisar Inteligente'}
                   </Button>
                 </div>
               )}
@@ -187,8 +205,8 @@ const App: React.FC = () => {
               {result && (
                 <div className="w-full space-y-6 md:space-y-8 animate-in fade-in duration-700">
                   <div className="bg-slate-900/60 border border-white/5 p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-xl">
-                    <h3 className={`font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-3 ${mode === 'profile' ? 'text-orange-400' : 'text-purple-400'}`}>
-                      Análise Inteligente
+                    <h3 className={`font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-3 ${mode === 'profile' ? 'text-orange-400' : mode === 'chat' ? 'text-purple-400' : 'text-rose-400'}`}>
+                      {mode === 'pickup' ? 'Dose de Carisma' : 'Análise Inteligente'}
                     </h3>
                     <p className="text-slate-200 text-sm md:text-lg leading-relaxed font-medium">
                       {result.analise_estrategica}
@@ -211,7 +229,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
               )}
-            </section>
+            </main>
           )}
         </main>
       </div>
