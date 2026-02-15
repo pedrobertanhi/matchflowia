@@ -3,21 +3,19 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResponse, AnalysisMode } from "../types";
 
 const SYSTEM_INSTRUCTION = `
-  Você é o "MatchFlow.AI", o mestre do carisma digital e "text game".
+  Você é o "MatchFlow.AI", o mestre supremo da dinâmica social e "text game" para aplicativos como Tinder e Instagram.
   
-  DIRETRIZES DE ESTILO (CRÍTICO):
-  - BREVIDADE: Cantadas devem ter no MÁXIMO 12 palavras. Seja direto e cirúrgico.
-  - CONTEXTO VISUAL: Use elementos da imagem (um detalhe na roupa, o lugar, um objeto ao fundo, a expressão). 
-  - QUALIDADE: Fuja de clichês de internet ("seu pai é padeiro", etc). Crie algo que pareça que você acabou de pensar ao ver a foto.
-  - TONS: 
-    1. "Criativa": Observação inteligente sobre o cenário.
-    2. "Ousada": Flerte direto mas elegante.
-    3. "Engraçada": Quebra de gelo com humor autodepreciativo ou absurdo.
+  DIRETRIZES DE FLUXO (CRÍTICO):
+  - TÉCNICA PONTE + PERGUNTA: Em conversas, sua missão é NUNCA deixar o assunto morrer. Toda resposta deve conter uma afirmação curta (ponte) seguida de uma pergunta instigante (gancho).
+  - BREVIDADE: Máximo de 12 a 15 palavras. Mensagens curtas convertem mais.
+  - CONTEXTO: Analise o tom da pessoa no print. Se ela for seca, seja desafiador. Se ela for receptiva, seja lúdico.
+  - QUALIDADE: Evite clichês. Crie ganchos que despertem curiosidade, ego ou humor.
 
   REGRAS INVIOLÁVEIS:
   - NUNCA use emojis no campo "texto".
+  - NUNCA dê respostas fechadas (que terminam em ponto final sem uma pergunta).
   - Idioma: Português do Brasil (PT-BR).
-  - Proibido: Linguagem vulgar, sexual explícita ou ofensiva.
+  - Proibido: Linguagem vulgar ou ofensiva.
 `;
 
 const RESPONSE_SCHEMA = {
@@ -25,16 +23,16 @@ const RESPONSE_SCHEMA = {
   properties: {
     analise_estrategica: { 
       type: Type.STRING, 
-      description: "Explicação tática rápida do porquê essas abordagens funcionam neste contexto." 
+      description: "Análise rápida da temperatura da conversa e por que o gancho escolhido vai funcionar." 
     },
     opcoes: {
       type: Type.ARRAY,
       items: {
         type: Type.OBJECT,
         properties: {
-          tipo: { type: Type.STRING, description: "Ex: Criativa, Ousada, Engraçada" },
-          texto: { type: Type.STRING, description: "A cantada curta (máx 12 palavras). SEM EMOJIS." },
-          motivo: { type: Type.STRING, description: "O gatilho psicológico usado." }
+          tipo: { type: Type.STRING, description: "Ex: Provocativa, Curiosa, Lúdica" },
+          texto: { type: Type.STRING, description: "A resposta completa: [Ponte] + [Pergunta]. SEM EMOJIS." },
+          motivo: { type: Type.STRING, description: "O gatilho psicológico de continuidade usado." }
         },
         required: ["tipo", "texto", "motivo"]
       }
@@ -47,30 +45,32 @@ export const analyzeImageWithGemini = async (base64Image: string, mode: Analysis
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   
   let modeSpecificPrompt = "";
-  if (mode === 'pickup') {
+  if (mode === 'chat') {
+    modeSpecificPrompt = `
+      MODO SALVAR CONVERSA (FLUXO INFINITO):
+      Analise o print desta conversa. 
+      Sua tarefa é criar 3 sugestões que usem a estrutura: [Resposta ao que foi dito] + [Pergunta de engajamento].
+      Objetivo: Fazer a pessoa do outro lado querer responder imediatamente. 
+      Use ganchos baseados em curiosidade, desafio leve ou suposições engraçadas sobre ela.
+    `;
+  } else if (mode === 'pickup') {
     modeSpecificPrompt = `
       MODO CANTADA DE IMPACTO: 
-      Gere 3 frases de flerte extremamente curtas (máximo 12 palavras) baseadas em um detalhe específico desta foto. 
-      A frase deve ser impossível de ignorar e parecer espontânea. 
-      Não use perguntas genéricas. Use afirmações ou observações provocativas.
-    `;
-  } else if (mode === 'profile') {
-    modeSpecificPrompt = `
-      MODO ABRIDOR DE PERFIL: 
-      Gere 3 perguntas ou comentários curtos sobre o estilo de vida ou interesses visíveis na foto para iniciar uma conversa.
+      Gere 3 frases de flerte ou perguntas provocativas extremamente curtas (máximo 12 palavras) baseadas na foto.
+      Foque em gerar uma RESPOSTA imediata.
     `;
   } else {
     modeSpecificPrompt = `
-      MODO SALVAR CONVERSA: 
-      Gere 3 respostas táticas para o print deste chat. Se a pessoa foi seca, provoque. Se o papo parou, mude o frame.
+      MODO ABRIDOR DE PERFIL: 
+      Gere 3 ganchos baseados em detalhes visuais (máximo 12 palavras) para iniciar a conversa com uma pergunta ou observação única.
     `;
   }
 
   const prompt = `
     Analise esta imagem. 
-    Ação solicitada: ${modeSpecificPrompt}
+    Ação específica: ${modeSpecificPrompt}
     
-    Lembre-se da regra de ouro: SEM EMOJIS e texto muito curto.
+    Lembre-se: Resposta curta + Pergunta instigante. SEM EMOJIS.
   `;
 
   try {

@@ -148,11 +148,11 @@ const App: React.FC = () => {
                 </div>
                 <h2 className="text-base md:text-lg font-bold text-white mb-2 text-center">
                   {mode === 'profile' && 'Envie o print do perfil/story'}
-                  {mode === 'chat' && 'Envie o print da conversa'}
+                  {mode === 'chat' && 'Envie o print da conversa travada'}
                   {mode === 'pickup' && 'Envie a foto do perfil para a cantada'}
                 </h2>
                 <p className="text-slate-500 text-center max-w-xs text-[10px] md:text-xs italic px-4">
-                  {mode === 'pickup' ? 'Nossa IA criará algo único baseado no cenário ou estilo da pessoa.' : 'Nossa IA detectará o tipo de print automaticamente para você.'}
+                  {mode === 'chat' ? 'Geraremos respostas com ganchos para o papo nunca morrer.' : 'Nossa IA criará algo único baseado no cenário ou estilo da pessoa.'}
                 </p>
                 <input 
                   type="file" 
@@ -191,7 +191,7 @@ const App: React.FC = () => {
                     isLoading={loadingState === LoadingState.ANALYZING}
                     className={`w-full max-w-xs md:max-w-sm h-14 md:h-16 text-base md:text-lg rounded-2xl font-black border-none shadow-xl ${getGradientByMode()}`}
                   >
-                    {loadingState === LoadingState.ANALYZING ? 'Gerando inteligência...' : mode === 'pickup' ? 'Gerar Cantadas' : 'Analisar Inteligente'}
+                    {loadingState === LoadingState.ANALYZING ? 'Gerando respostas...' : mode === 'chat' ? 'Manter Fluxo do Papo' : 'Analisar Inteligente'}
                   </Button>
                 </div>
               )}
@@ -206,7 +206,7 @@ const App: React.FC = () => {
                 <div className="w-full space-y-6 md:space-y-8 animate-in fade-in duration-700">
                   <div className="bg-slate-900/60 border border-white/5 p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] backdrop-blur-xl">
                     <h3 className={`font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-3 ${mode === 'profile' ? 'text-orange-400' : mode === 'chat' ? 'text-purple-400' : 'text-rose-400'}`}>
-                      {mode === 'pickup' ? 'Dose de Carisma' : 'Análise Inteligente'}
+                      {mode === 'chat' ? 'Estratégia de Continuidade' : 'Análise Inteligente'}
                     </h3>
                     <p className="text-slate-200 text-sm md:text-lg leading-relaxed font-medium">
                       {result.analise_estrategica}
@@ -229,7 +229,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
               )}
-            </main>
+            </section>
           )}
         </main>
       </div>
