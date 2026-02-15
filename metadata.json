@@ -1,0 +1,7 @@
+{
+  "name": "MatchFlow.AI",
+  "description": "Analise fotos de perfis de apps de relacionamento e receba as melhores frases para puxar assunto com carisma e criatividade.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
