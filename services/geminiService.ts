@@ -1,5 +1,9 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResponse, AnalysisMode } from "../types";
+
+// Cache simples em memória para evitar chamadas repetidas na mesma sessão
+const analysisCache: Record<string, AnalysisResponse> = {};
 
 const SYSTEM_INSTRUCTION = `
   Você é o motor de inteligência estética e social do "MatchFlow.AI". Sua análise deve ser fria, técnica, objetiva e consistente.
@@ -65,7 +69,36 @@ const RESPONSE_SCHEMA = {
   required: ["analise_estrategica", "opcoes"]
 };
 
+// Função de utilidade para gerar uma chave de cache baseada na imagem e modo
+const getCacheKey = (base64: string, mode: string) => {
+  // Usamos apenas os primeiros 500 caracteres da imagem + o modo para criar uma chave leve
+  return `${mode}_${base64.substring(0, 500)}`;
+};
+
+// Função para executar chamadas com retry (tentativa automática em caso de erro 429)
+async function fetchWithRetry<T>(fn: () => Promise<T>, retries = 3, delay = 2000): Promise<T> {
+  try {
+    return await fn();
+  } catch (error: any) {
+    const isRateLimit = error.message?.includes('429') || error.message?.toLowerCase().includes('too many requests');
+    if (retries > 0 && isRateLimit) {
+      console.warn(`Limite de cota atingido. Tentando novamente em ${delay/1000}s...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return fetchWithRetry(fn, retries - 1, delay * 2); // Dobra o tempo de espera
+    }
+    throw error;
+  }
+}
+
 export const analyzeImageWithGemini = async (base64Image: string, mode: AnalysisMode, isRegeneration: boolean = false): Promise<AnalysisResponse> => {
+  const cacheKey = getCacheKey(base64Image, mode);
+
+  // 1. Verificar Cache (Não usamos cache se for uma REGENERAÇÃO solicitada pelo usuário)
+  if (!isRegeneration && analysisCache[cacheKey]) {
+    console.log("Resultado recuperado do cache.");
+    return analysisCache[cacheKey];
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   
   let modeSpecificPrompt = "";
@@ -90,22 +123,26 @@ export const analyzeImageWithGemini = async (base64Image: string, mode: Analysis
   }
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: {
-        parts: [
-          { inlineData: { mimeType: 'image/jpeg', data: base64Image } },
-          { text: `Ação: ${modeSpecificPrompt}` }
-        ]
-      },
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        responseMimeType: "application/json",
-        responseSchema: RESPONSE_SCHEMA,
-        temperature: isRegeneration ? 0.7 : 0, // Aumentamos a temperatura na regeneração para mais criatividade
-      }
-    });
+    const callApi = async () => {
+      const response = await ai.models.generateContent({
+        model: 'gemini-3-flash-preview',
+        contents: {
+          parts: [
+            { inlineData: { mimeType: 'image/jpeg', data: base64Image } },
+            { text: `Ação: ${modeSpecificPrompt}` }
+          ]
+        },
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+          responseMimeType: "application/json",
+          responseSchema: RESPONSE_SCHEMA,
+          temperature: isRegeneration ? 0.7 : 0,
+        }
+      });
+      return response;
+    };
 
+    const response = await fetchWithRetry(callApi);
     const result = JSON.parse(response.text || '{}');
     
     if (mode === 'visual' && (!result.detailed_scores || result.detailed_scores.length === 0)) {
@@ -117,9 +154,17 @@ export const analyzeImageWithGemini = async (base64Image: string, mode: Analysis
        ];
     }
 
+    // 2. Salvar no Cache para futuras consultas
+    if (!isRegeneration) {
+      analysisCache[cacheKey] = result as AnalysisResponse;
+    }
+
     return result as AnalysisResponse;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini Error:", error);
-    throw new Error("Erro na análise. Tente novamente em instantes.");
+    if (error.message?.includes('429')) {
+      throw new Error("Limite de uso gratuito atingido. Aguarde 1 minuto e tente novamente.");
+    }
+    throw new Error("Erro na análise. Verifique sua conexão ou tente novamente.");
   }
 };

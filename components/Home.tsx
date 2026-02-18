@@ -28,7 +28,7 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </div>
         <div className="hidden sm:flex gap-8 items-center">
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white cursor-pointer transition-colors">Social</span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white cursor-pointer transition-colors">Upgrade Visual</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white cursor-pointer transition-colors">Looksmax</span>
           <Button onClick={onStart} variant="ghost" className="border border-white/10 px-4 py-2 rounded-xl text-[10px]">Acessar App</Button>
         </div>
       </nav>
@@ -45,13 +45,15 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
 
         <h1 className="text-5xl sm:text-7xl md:text-[9rem] font-black mb-8 tracking-tighter leading-[0.85] animate-in fade-in slide-in-from-bottom-4 duration-700">
           Atração <br />
-          <span className="bg-gradient-to-r from-orange-400 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-            Escalável.
-          </span>
+          <div className="relative inline-block overflow-hidden whitespace-nowrap animate-typing border-r-[0.05em] border-orange-500 pr-1">
+            <span className="bg-gradient-to-r from-orange-400 via-rose-500 to-pink-500 bg-clip-text text-transparent">
+              Escalável.
+            </span>
+          </div>
         </h1>
 
         <p className="text-slate-400 text-lg md:text-2xl max-w-3xl mb-12 leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000 px-4 font-medium">
-          A primeira IA que une <span className="text-white">Dinâmica Social</span> e <span className="text-cyan-400">Upgrade Visual</span>. Melhore sua imagem e nunca mais deixe uma conversa esfriar.
+          A primeira IA que une <span className="text-white">Dinâmica Social</span> e <span className="text-cyan-400">Looksmax</span>. Melhore sua imagem e nunca mais deixe uma conversa esfriar.
         </p>
 
         <div className="flex flex-col items-center gap-8 w-full max-w-xs md:max-w-md animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -61,6 +63,32 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
           >
             Começar Evolução 🚀
           </Button>
+        </div>
+      </section>
+
+      {/* Security & Privacy Section */}
+      <section className="w-full max-w-5xl px-6 py-24">
+        <div className="glass p-12 rounded-[4rem] border-white/5 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="w-24 h-24 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04kM12 21.48l.342.106A11.957 11.957 0 0112 21.48z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div className="space-y-4 text-center md:text-left">
+              <h3 className="text-3xl font-black tracking-tight uppercase">Privacidade Blindada</h3>
+              <p className="text-slate-400 text-lg font-medium leading-relaxed">
+                Suas fotos são processadas <span className="text-green-400">em tempo real</span> e deletadas permanentemente da memória após a análise. Não possuímos banco de dados de imagens e nada é compartilhado com terceiros.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Criptografia SSL</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Zero Storage Policy</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">GDPR Compliant</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -230,6 +258,22 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         @keyframes scan {
           0%, 100% { top: 0; }
           50% { top: 100%; }
+        }
+
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+          from, to { border-color: transparent }
+          50% { border-color: #f97316 }
+        }
+
+        .animate-typing {
+          animation: 
+            typing 1.5s steps(15, end) 1s both,
+            blink-caret 0.75s step-end infinite;
         }
       `}</style>
     </div>
