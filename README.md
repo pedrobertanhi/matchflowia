@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/6a8a5018-50e7-4c30-8c7b-bcd14aae4655" alt="Banner do MatchFlow IA" width="100%">
-
 # MatchFlow IA
 
 **Análise visual, conversa e estratégia social com inteligência artificial.**
@@ -10,6 +8,9 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Google_Gemini-API-8E75B2?logo=googlegemini&logoColor=white)
+
+
+<img src="https://github.com/user-attachments/assets/6a8a5018-50e7-4c30-8c7b-bcd14aae4655" alt="Banner do MatchFlow IA" width="100%">
 
 </div>
 
