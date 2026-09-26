@@ -1,0 +1,33 @@
+{
+  "name": "matchflow-ai",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node server.mjs",
+    "build": "vite build",
+    "start": "cross-env NODE_ENV=production node server.mjs",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "@google/genai": "^1.41.0",
+    "dotenv": "^17.2.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "cross-env": "^10.0.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
