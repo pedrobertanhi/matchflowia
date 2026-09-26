@@ -8,8 +8,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<ButtonProps> = ({ 
   children, 
   variant = 'primary', 
-  isLoading, 
-  className, 
+  isLoading = false, 
+  className = '', 
   ...props 
 }) => {
   const baseStyles = "px-6 py-3 rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs md:text-sm";
@@ -25,6 +25,8 @@ export const Button: React.FC<ButtonProps> = ({
       className={`${baseStyles} ${variants[variant]} ${className}`}
       disabled={isLoading || props.disabled}
       {...props}
+      type={props.type ?? 'button'}
+      aria-busy={isLoading}
     >
       {isLoading ? (
         <svg className="animate-spin h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

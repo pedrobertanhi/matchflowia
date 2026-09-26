@@ -9,14 +9,12 @@ interface HomeProps {
 export const Home: React.FC<HomeProps> = ({ onStart }) => {
   return (
     <div className="min-h-screen bg-[#090B10] text-white flex flex-col items-center overflow-x-hidden font-inter selection:bg-orange-500/30">
-      {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.15),transparent_70%)] blur-3xl"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.15),transparent_70%)] blur-3xl"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-slate-950/10"></div>
       </div>
 
-      {/* Navigation */}
       <nav className="w-full max-w-7xl px-6 py-8 flex justify-between items-center z-10">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-orange-500 to-pink-600 flex items-center justify-center shadow-lg">
@@ -33,7 +31,6 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="w-full max-w-6xl px-4 md:px-6 pt-12 md:pt-24 pb-16 md:pb-32 flex flex-col items-center text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-orange-400 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mb-10 animate-in fade-in slide-in-from-top-4 duration-1000">
           <span className="relative flex h-2 w-2">
@@ -66,7 +63,6 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </div>
       </section>
 
-      {/* Security & Privacy Section */}
       <section className="w-full max-w-5xl px-6 py-24">
         <div className="glass p-12 rounded-[4rem] border-white/5 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent"></div>
@@ -78,21 +74,20 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
               </svg>
             </div>
             <div className="space-y-4 text-center md:text-left">
-              <h3 className="text-3xl font-black tracking-tight uppercase">Privacidade Blindada</h3>
+              <h3 className="text-3xl font-black tracking-tight uppercase">Privacidade com transparência</h3>
               <p className="text-slate-400 text-lg font-medium leading-relaxed">
-                Suas fotos são processadas <span className="text-green-400">em tempo real</span> e deletadas permanentemente da memória após a análise. Não possuímos banco de dados de imagens e nada é compartilhado com terceiros.
+                A aplicação não mantém um banco de imagens. Ao solicitar uma análise, a foto é enviada ao provedor de IA configurado e processada conforme os termos desse serviço.
               </p>
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Criptografia SSL</span>
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Zero Storage Policy</span>
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">GDPR Compliant</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Chave protegida no servidor</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Sem persistência local</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-300">Limite de requisições</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Visual Upgrade Spotlight */}
       <section className="w-full max-w-6xl px-6 py-24 relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -105,8 +100,7 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
                  alt="Exemplo de Análise Visual"
                />
                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-               {/* Scanning Line Effect */}
-               <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)] animate-[scan_3s_ease-in-out_infinite]"></div>
+               <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_rgba(6,182,212,1)] animate-scan"></div>
                
                <div className="absolute bottom-8 left-8 right-8 space-y-4">
                  <div className="flex justify-between items-end">
@@ -154,7 +148,6 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </div>
       </section>
 
-      {/* The Problem Section */}
       <section className="w-full max-w-6xl px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div className="space-y-8">
           <span className="text-pink-500 font-black text-xs uppercase tracking-[0.4em]">O Grande Problema</span>
@@ -163,8 +156,8 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
             <span className="text-slate-600">encontros zero?</span>
           </h2>
           <p className="text-slate-400 text-lg leading-relaxed font-medium">
-            A maioria dos homens falha porque tenta usar frases genéricas ou fotos de baixa qualidade que não transmitem valor. <br /><br />
-            Para se destacar, você precisa de <strong>estratégia visual e social</strong>. Nós resolvemos ambos em um só lugar.
+            Frases genéricas e fotos pouco cuidadas podem dificultar uma boa primeira impressão. <br /><br />
+            Para se destacar, combine <strong>contexto, respeito e apresentação</strong>. O MatchFlow reúne essas análises em um só lugar.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4">
@@ -178,12 +171,11 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
              <div className="absolute top-0 right-0 p-4 opacity-20 text-4xl group-hover:scale-110 transition-transform">✅</div>
              <h4 className="text-green-400 font-black uppercase text-xs tracking-widest mb-2">Abordagem MatchFlow</h4>
              <p className="text-white font-black text-xl italic">"Vi que você tem uma edição do 'Sapiens' ali no canto... o que achou daquela teoria?"</p>
-             <div className="mt-4 text-[10px] text-green-500 font-bold uppercase tracking-widest">Status: Resposta Imediata</div>
+             <div className="mt-4 text-[10px] text-green-500 font-bold uppercase tracking-widest">Status: Contextual</div>
           </div>
         </div>
       </section>
 
-      {/* How it Works - Steps */}
       <section className="w-full max-w-6xl px-6 py-32 flex flex-col items-center">
         <h2 className="text-4xl md:text-6xl font-black mb-20 text-center tracking-tighter italic">O fluxo do resultado</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full">
@@ -219,7 +211,6 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </div>
       </section>
 
-      {/* CTA Final */}
       <section className="w-full max-w-4xl px-6 py-40 text-center flex flex-col items-center">
         <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-12">
           Domine o jogo <br />
@@ -233,7 +224,6 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
         </Button>
       </section>
 
-      {/* Footer */}
       <footer className="w-full max-w-6xl px-6 py-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
         <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
           <div className="text-2xl font-black tracking-tighter">
@@ -244,38 +234,9 @@ export const Home: React.FC<HomeProps> = ({ onStart }) => {
           </p>
         </div>
         <div className="flex flex-col gap-2 items-center md:items-end">
-           <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.3em]">
-            © 2026 MatchFlow AI. Todos os direitos reservados.
-          </p>
-          <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-            <span className="hover:text-white cursor-pointer transition-colors">Termos</span>
-            <span className="hover:text-white cursor-pointer transition-colors">Privacidade</span>
-          </div>
+          <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.3em]">Projeto experimental · use imagens autorizadas</p>
         </div>
       </footer>
-
-      <style>{`
-        @keyframes scan {
-          0%, 100% { top: 0; }
-          50% { top: 100%; }
-        }
-
-        @keyframes typing {
-          from { width: 0 }
-          to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-          from, to { border-color: transparent }
-          50% { border-color: #f97316 }
-        }
-
-        .animate-typing {
-          animation: 
-            typing 1.5s steps(15, end) 1s both,
-            blink-caret 0.75s step-end infinite;
-        }
-      `}</style>
     </div>
   );
 };

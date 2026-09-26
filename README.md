@@ -2,99 +2,131 @@
 
 # MatchFlow IA
 
-**Análise visual, conversa e estratégia social com inteligência artificial.**
+**Análise visual e sugestões de conversa com inteligência artificial.**
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google_Gemini-API-8E75B2?logo=googlegemini&logoColor=white)
-
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-API-8E75B2?logo=googlegemini&logoColor=white)
 
 <img src="https://github.com/user-attachments/assets/6a8a5018-50e7-4c30-8c7b-bcd14aae4655" alt="Banner do MatchFlow IA" width="100%">
 
 </div>
 
-## Sobre o projeto
+## Sobre
 
-O **MatchFlow IA** é uma aplicação web que usa a API do Google Gemini para gerar orientações personalizadas a partir de texto e imagens. A interface reúne diferentes modos de análise em uma experiência responsiva e direta.
+O MatchFlow IA é uma aplicação web experimental que analisa imagens para sugerir melhorias de apresentação e formas respeitosas de iniciar ou continuar conversas. A interface é responsiva e oferece modos para perfil, conversa, abordagem e análise visual.
 
-> Projeto experimental. As respostas são geradas por inteligência artificial e não substituem avaliação profissional.
+As respostas são geradas por inteligência artificial, podem conter erros e não substituem avaliação profissional.
 
-## Funcionalidades
+## Principais recursos
 
-- análise visual de uma imagem enviada pelo usuário;
-- conversa contextual com a IA;
-- sugestões de abordagem e interação;
-- análise estratégica de perfil;
-- respostas estruturadas em JSON para apresentação na interface;
-- cache em memória para consultas repetidas;
-- novas tentativas automáticas quando a API atinge o limite de requisições.
+- upload de imagens JPEG, PNG e WebP com validação de tamanho;
+- quatro modos de análise com respostas estruturadas;
+- chave da API mantida exclusivamente no servidor;
+- limitação básica de requisições por endereço IP;
+- validação e normalização das respostas do provedor;
+- interface responsiva e acessível a teclado;
+- respeito à preferência de redução de movimento.
+
+## Arquitetura
+
+```text
+Navegador ──POST /api/analyze──> Servidor Node.js ──> API Gemini
+```
+
+O navegador nunca recebe `GEMINI_API_KEY`. O servidor valida o tipo e o tamanho da imagem antes de encaminhá-la ao provedor de IA.
 
 ## Tecnologias
 
 | Camada | Tecnologia |
 | --- | --- |
 | Interface | React 19 + TypeScript |
+| Estilos | Tailwind CSS 4 |
 | Build | Vite 6 |
-| Estilos | Tailwind CSS |
-| Inteligência artificial | Google Gemini |
-| Validação de respostas | Schema JSON da API Gemini |
+| Servidor | Node.js 20+ |
+| IA | Google Gemini |
 
-## Como executar
+## Executar localmente
 
-### Pré-requisitos
+### Requisitos
 
-- Node.js 18 ou superior;
-- uma chave da API Gemini.
+- Node.js 20 ou superior;
+- uma chave válida da API Gemini.
 
 ```bash
-git clone https://github.com/pedrobertanhi/matchflowia.git
+git clone <url-do-repositorio>
 cd matchflowia
 npm install
 ```
 
-Crie o arquivo `.env.local` na raiz:
+Copie `.env.example` para `.env.local` e preencha somente no arquivo local:
 
 ```env
 GEMINI_API_KEY=sua_chave_aqui
+PORT=3000
+API_RATE_LIMIT=10
+TRUST_PROXY=false
 ```
 
-Inicie o ambiente:
+Inicie o projeto:
 
 ```bash
 npm run dev
 ```
 
-Abra o endereço exibido pelo Vite no terminal.
+Acesse `http://localhost:3000`.
 
 ## Scripts
 
 | Comando | Descrição |
 | --- | --- |
-| `npm run dev` | inicia o servidor de desenvolvimento |
-| `npm run build` | gera a versão de produção |
-| `npm run preview` | abre uma prévia do build |
+| `npm run dev` | inicia o servidor e o Vite em modo de desenvolvimento |
+| `npm run typecheck` | verifica os tipos TypeScript |
+| `npm run build` | gera a interface de produção |
+| `npm run check` | executa a verificação de tipos e o build |
+| `npm start` | serve o build e a API em modo de produção |
+
+## Produção
+
+Configure `GEMINI_API_KEY` como variável secreta no provedor de hospedagem. Não use prefixos como `VITE_`, pois variáveis com esse prefixo são expostas no bundle do navegador.
+
+O limite em memória reduz abusos em uma única instância. Em uma implantação pública com várias instâncias, substitua-o por um limitador distribuído e considere autenticação, cotas por usuário e monitoramento de custos.
+
+Defina `TRUST_PROXY=true` somente quando a aplicação estiver atrás de um proxy confiável que sobrescreva `X-Forwarded-For`.
 
 ## Privacidade
 
-As imagens e mensagens inseridas na aplicação são enviadas à API Gemini para processamento. Evite enviar documentos, dados pessoais sensíveis ou imagens de terceiros sem autorização.
+- a aplicação não grava imagens em arquivos ou banco de dados;
+- cada imagem é mantida apenas na memória necessária para processar a requisição;
+- a imagem é enviada ao Google Gemini quando o usuário solicita a análise;
+- o tratamento realizado pelo provedor segue os termos e a política de privacidade da conta que fornece a chave;
+- não envie documentos, imagens de menores, dados sensíveis ou fotos de terceiros sem autorização.
 
-## Estrutura principal
+## Segurança
+
+Arquivos `.env` são ignorados pelo Git. Antes de publicar uma cópia do projeto, verifique também o histórico do Git e revogue imediatamente qualquer chave que tenha sido commitada anteriormente. Consulte [SECURITY.md](SECURITY.md) para relatar uma vulnerabilidade.
+
+## Estrutura
 
 ```text
 matchflowia/
 ├── components/
+├── server/
+│   └── gemini.mjs
 ├── services/
 │   └── geminiService.ts
 ├── App.tsx
-├── index.tsx
-└── package.json
+├── server.mjs
+├── styles.css
+└── vite.config.ts
 ```
 
 ## Status
 
 Protótipo funcional em desenvolvimento.
 
----
+## Licença
 
-Desenvolvido por [Pedro Bertanhi](https://github.com/pedrobertanhi).
+Distribuído sob a licença MIT. Consulte [LICENSE](LICENSE).

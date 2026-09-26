@@ -8,10 +8,14 @@ interface ResultCardProps {
 export const ResultCard: React.FC<ResultCardProps> = ({ option }) => {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(option.texto);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(option.texto);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   const getTheme = () => {
@@ -20,7 +24,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ option }) => {
       return { color: 'text-cyan-400', border: 'border-cyan-500/20', bg: 'bg-cyan-500/5', dot: 'bg-cyan-400' };
     if (lowerType.includes('grooming') || lowerType.includes('observador') || lowerType.includes('pele')) 
       return { color: 'text-orange-400', border: 'border-orange-500/20', bg: 'bg-orange-500/5', dot: 'bg-orange-400' };
-    if (lowerType.includes('ousada') || lowerType.includes('impacto') || lowerType.includes('pele')) 
+    if (lowerType.includes('ousada') || lowerType.includes('impacto')) 
       return { color: 'text-rose-400', border: 'border-rose-500/20', bg: 'bg-orange-500/5', dot: 'bg-rose-400' };
     return { color: 'text-pink-400', border: 'border-pink-500/20', bg: 'bg-pink-500/5', dot: 'bg-pink-400' };
   };
@@ -49,7 +53,9 @@ export const ResultCard: React.FC<ResultCardProps> = ({ option }) => {
         </span>
         {!isMelhoriaTecnica && (
           <button 
+            type="button"
             onClick={handleCopy}
+            aria-label={copied ? 'Texto copiado' : 'Copiar sugestão'}
             className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-90"
           >
             {copied ? (
