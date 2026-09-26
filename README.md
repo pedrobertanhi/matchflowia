@@ -29,6 +29,7 @@ As respostas são geradas por inteligência artificial, podem conter erros e nã
 - validação e normalização das respostas do provedor;
 - interface responsiva e acessível a teclado;
 - respeito à preferência de redução de movimento.
+- validação automática de tipos, build e dependências pelo GitHub Actions.
 
 ## Arquitetura
 
